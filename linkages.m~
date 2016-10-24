@@ -128,7 +128,7 @@ w = 10; % radius frequency of the oscillation
 min_angle = pi/3; % oscillation range
 max_angle = pi; % uscillation range
 original = links(driver).angleTarget; % original angle, used for oscillation
-oscillation = false; % decides whether to make the driver link oscillate or not.
+oscillation = true
 while t < T
 	% Procedurally set the driver angle.
 	% Right now, the target angle is being linearly increased, but you may
@@ -136,11 +136,14 @@ while t < T
     if ~oscillation
         links(driver).angleTarget = links(driver).angleTarget + dt*angVel;
     else
-        %oscillatory motion code blcok
-        links(driver).angleTarget = original + ...
-            (max_angle - min_angle) * sin(w*t) / 2 + (max_angle + min_angle) / 2;
-        links(driver).angleTarget
-    end    
+        
+    %oscillatory motion code blcok
+  
+    links(driver).angleTarget = original + ...
+        (max_angle - min_angle) * sin(w*t) / 2 + (max_angle + min_angle) / 2;
+    links(driver).angleTarget
+    
+    
     
 	% Solve for linkage orientations and positions
 	[links,feasible] = solveLinkage(links,pins,sliders,opt);
