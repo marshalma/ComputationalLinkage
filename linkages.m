@@ -272,7 +272,9 @@ for i = 1 : length(particles)
 	particle = particles(i);
 	link = links(particle.link);
 	% IMPLEMENT ME: compute x, the world space position of the particle.
-	x = [0,0]';
+    theta = link.angle;
+    coor = link.pos;
+	x = [cos(theta) -sin(theta); sin(theta) cos(theta)] * particle.point + coor;
 	% Append world position to the array (grows indefinitely)
 	particles(i).pointsWorld(:,end+1) = x;
 end
