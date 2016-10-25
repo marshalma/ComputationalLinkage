@@ -11,6 +11,7 @@ links = [];
 pins = [];
 sliders = [];
 particles = [];
+jacobian = true; % turn jocobian on by default to accelerate the process
 oscillation = false; % turn oscillation off by default.
 switch scene
 	case 0
@@ -479,6 +480,7 @@ switch scene
         
         
 	case 6
+        jacobian = false;
 		% Another linkage
         links(1).angle = 0;
         links(1).pos = [0 0]';
@@ -541,6 +543,7 @@ switch scene
         particles(1).point = [2 0]';
         
 	case 10
+        jacobian = false;
 		% Extra credit!
         oscillation = true; % decides whether to make the driver link oscillate or not.
         % (double rocker)
@@ -611,10 +614,17 @@ if verLessThan('matlab','8.1')
 		'DerivativeCheck','off',...
 		'Display','off'); % final-detailed iter-detailed off
 else
-	opt = optimoptions('lsqnonlin',...
+    if jacobian
+        opt = optimoptions('lsqnonlin',...
+		'Jacobian','on',...
+		'DerivativeCheck','off',...
+		'Display','off'); % final-detailed iter-detailed off
+    else
+        opt = optimoptions('lsqnonlin',...
 		'Jacobian','off',...
 		'DerivativeCheck','off',...
 		'Display','off'); % final-detailed iter-detailed off
+    end
 end
 
 % Simulation loop
@@ -775,7 +785,7 @@ for i = 1 : npins
 	% World positions
 	xa = Ra * ra + linkA.pos;
 	xb = Rb * rb + linkB.pos;
-	p = abs(xa(1:2) - xb(1:2));
+	p = xa(1:2) - xb(1:2);
 	c(rows,1) = p;
 	%
 	% Optional Jacobian computation
