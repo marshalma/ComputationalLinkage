@@ -480,8 +480,113 @@ switch scene
         
 	case 6
 		% Another linkage
+        links(1).angle = 0;
+        links(1).pos = [0 0]';
+        links(1).verts = [
+            0 0 0 0
+            0 0 0 0
+        ];
+        
+        links(2).angle = 0;
+        links(2).pos = [0 0]';
+        links(2).verts = [
+            0 2 2 0
+            -0.1  -0.1  0.1   0.1
+        ];
+    
+        links(3).angle = 0;
+        links(3).pos = [0 0]';
+        links(3).verts = [
+            0 8 8 0
+            -0.1  -0.1  0.1   0.1
+        ];
+    
+        links(4).angle = 0;
+        links(4).pos = [0 0]';
+        links(4).verts = [
+            0 8 8 0
+            -0.1  -0.1  0.1   0.1
+        ];
+
+        pins(1).linkA = 2;
+        pins(1).linkB = 3;
+        pins(1).pointA = [2 0]';
+        pins(1).pointB = [0 0]';
+        
+        pins(2).linkA = 2;
+        pins(2).linkB = 1;
+        pins(2).pointA = [0 0]';
+        pins(2).pointB = [0 0]';
+        
+        pins(3).linkA = 2;
+        pins(3).linkB = 4;
+        pins(3).pointA = [2 0]';
+        pins(3).pointB = [0 0]';
+
+        sliders(1).linkA = 3;
+        sliders(1).linkB = 1;
+        sliders(1).pointA = [8 0]';
+        sliders(1).rangeB = [[0 0]' [10 10]'];
+        
+        sliders(2).linkA = 4;
+        sliders(2).linkB = 1;
+        sliders(2).pointA = [8 0]';
+        sliders(2).rangeB = [[0 0]' [-10 10]'];
+    
+        grounded = 1;
+        driver = 2;
+        
+        
+        particles(1).link = 2;
+        particles(1).point = [2 0]';
+        
 	case 10
 		% Extra credit!
+        oscillation = true; % decides whether to make the driver link oscillate or not.
+        % (double rocker)
+        min_angle = pi/100; % oscillation range 
+        max_angle = pi/4; % uscillation range
+        
+        
+        links(1).angle = 0;
+        links(1).pos = [0 0]';
+        links(1).verts = [
+            0.0 5 5 0
+            -0.1  -0.1  0.1   0.1
+        ];
+    
+        links(2).angle = pi/100;
+        links(2).pos = [0 0]';
+        links(2).verts = [
+            0.0 5/sqrt(2) 5/sqrt(2) 0
+            -0.1  -0.1  0.1   0.1
+        ];
+    
+        links(3).angle = pi-pi/100;
+        links(3).pos = [5 0]';
+        links(3).verts = [
+            0.0 10 10 0
+            -0.1  -0.1  0.1   0.1
+        ];
+        
+        pins(1).linkA = 1;
+        pins(1).linkB = 3;
+        pins(1).pointA = [5 0]';
+        pins(1).pointB = [0 0]';
+        
+        pins(2).linkA = 1;
+        pins(2).linkB = 2;
+        pins(2).pointA = [0 0]';
+        pins(2).pointB = [0 0]';
+        
+        sliders(1).linkA = 2;
+        sliders(1).linkB = 3;
+        sliders(1).pointA = [3 0]';
+        sliders(1).rangeB = [[0 0]' [10 0]'];
+ 
+        grounded = 1;
+        driver = 2;
+            
 end
 
 % Initialize
@@ -507,7 +612,7 @@ if verLessThan('matlab','8.1')
 		'Display','off'); % final-detailed iter-detailed off
 else
 	opt = optimoptions('lsqnonlin',...
-		'Jacobian','on',...
+		'Jacobian','off',...
 		'DerivativeCheck','off',...
 		'Display','off'); % final-detailed iter-detailed off
 end
@@ -528,13 +633,14 @@ while t < T
     else
         %oscillatory motion code blcok
         links(driver).angleTarget = ...
-            (max_angle - min_angle) * sin(w*t) / 2 + (max_angle + min_angle) / 2;
+            (max_angle - min_angle) * -cos(w*t) / 2 + (max_angle + min_angle) / 2;
     end    
     
 	% Solve for linkage orientations and positions
 	[links,feasible] = solveLinkage(links,pins,sliders,opt);
 	% Update particle positions
 	particles = updateParticles(links,particles);
+%     links(3).pos
 	% Draw scene
 	drawScene(t,links,pins,sliders,particles);
 	% Quit if over-constrained
@@ -611,7 +717,7 @@ end
 
 % Evaluate constraints
 ndof = 3*nlinks;
-ncon = 3 + 3 + 2*npins; % 3 for ground, 3 for driver, 2*npins for pins
+ncon = 3 + 3 + 2*npins + nsliders; % 3 for ground, 3 for driver, 2*npins for pins, 2*nsliders for sliders
 c = zeros(ncon,1);
 J = zeros(ncon,ndof);
 k = 0;
@@ -631,6 +737,27 @@ for i = 1 : nlinks
 		k = k + 3;
 	end
 end
+% Slider constraints
+for i = 1 : nsliders
+    slider = sliders(i);
+    rows = k;
+    k = k + 1;
+    idxLinkA = slider.linkA;
+    idxLinkB = slider.linkB;
+    linkA = links(idxLinkA);
+    linkB = links(idxLinkB);
+    Ra = rotationMatrix(linkA.angle);
+	Rb = rotationMatrix(linkB.angle);
+    pointA = slider.pointA;
+    rangeB = slider.rangeB;
+    xa = Ra * pointA + linkA.pos;
+    xb1 = Rb * rangeB(:,1) + linkB.pos;
+    xb2 = Rb * rangeB(:,2) + linkB.pos;
+    
+    c(rows, 1) = sqrt(sum((xb1-xa).^2)) + sqrt(sum((xb2-xa).^2)) - sqrt(sum((xb1-xb2).^2));
+    
+    % no jacobian computation for sliders
+end
 % Pin constraints
 for i = 1 : npins
 	pin = pins(i);
@@ -648,7 +775,7 @@ for i = 1 : npins
 	% World positions
 	xa = Ra * ra + linkA.pos;
 	xb = Rb * rb + linkB.pos;
-	p = xa(1:2) - xb(1:2);
+	p = abs(xa(1:2) - xb(1:2));
 	c(rows,1) = p;
 	%
 	% Optional Jacobian computation
@@ -665,6 +792,7 @@ for i = 1 : npins
 	J(rows,colAngB) = -dRb * rb;
 	J(rows,colPosB) = -eye(2);
 end
+
 end
 
 %%
@@ -728,6 +856,20 @@ for i = 1 : length(pins)
 	xb = Rb * pin.pointB + linkB.pos;
 	plot(xa(1),xa(2),'co','MarkerSize',10,'MarkerFaceColor','c');
 	plot(xb(1),xb(2),'mx','MarkerSize',10,'LineWidth',2);
+end
+% Draw Sliders
+for i = 1 : length(sliders)
+    slider = sliders(i);
+    linkA = links(slider.linkA);
+	linkB = links(slider.linkB);
+	Ra = rotationMatrix(linkA.angle);
+	Rb = rotationMatrix(linkB.angle);
+	xa = Ra * slider.pointA + linkA.pos;
+	xb1 = Rb * slider.rangeB(:,1) + linkB.pos;
+    xb2 = Rb * slider.rangeB(:,2) + linkB.pos;
+    X = [xb1 xb2];
+    plot(xa(1),xa(2),'co','MarkerSize',10,'MarkerFaceColor','c');
+    plot(X(1,:)', X(2,:), 'r')
 end
 % Draw particles
 for i = 1 : length(particles)

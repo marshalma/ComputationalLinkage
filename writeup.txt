@@ -3,7 +3,9 @@ issues:
 2. c^2 = a^2 + b^2 - 2*a*b*cos(theta)
 3. Chebyshev https://en.wikipedia.org/wiki/Chebyshev%27s_Lambda_Mechanism
 4. double rocker top link tumbling
-4. klann's dimensions: http://robotronics09.blogspot.com/2011/01/klann-mechanism.html
+5. klann's dimensions: http://robotronics09.blogspot.com/2011/01/klann-mechanism.html
+6. threshold
+7. driver pin to ground
 
 reference:
 1. drag link vs. crank rocker vs. double rocker
