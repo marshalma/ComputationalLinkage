@@ -76,15 +76,393 @@ switch scene
 		particles(2).link = 4;
 		particles(2).point = [2.5,-0.1]';
 	case 1
-		% Drag-link
+		% Drag-link % s = 2, l = 5, p = 4, q = 4
+		% Bottom link
+		links(1).angle = 0; % rotation from the positive x-axis
+		links(1).pos = [-1 0]'; % position of the center of rotation
+		links(1).verts = [ % display vertices
+			 0.0  2.0  2.0  0.0
+			-0.1 -0.1  0.1  0.1
+			];
+		% Left link
+		links(2).angle = pi/2;
+		links(2).pos = [-1 0]';
+		links(2).verts = [
+			 0.0  4.0  4.0  0.0
+			-0.1 -0.1  0.1  0.1
+			];
+		% Right link
+		links(3).angle = pi/2;
+		links(3).pos = [1 0]';
+		links(3).verts = [
+			 0.0   5    5   0.0
+			-0.1 -0.1  0.1  0.1
+			];
+		% Top link
+		links(4).angle = 0;
+		links(4).pos = [-1 1]';
+		links(4).verts = [
+			 0.0   4    4  0.0
+			-0.1 -0.1  0.1  0.1
+			];
+		
+		% Which link is grounded?
+		grounded = 1;
+		% Which link is the driver?
+		% Note: the driver must be attached (with a pin) to the ground.
+		driver = 2;
+		
+		% Bottom-left
+		pins(1).linkA = 1;
+		pins(1).linkB = 2;
+		pins(1).pointA = [0,0]';
+		pins(1).pointB = [0,0]';
+		% Bottom-right
+		pins(2).linkA = 1;
+		pins(2).linkB = 3;
+		pins(2).pointA = [2,0]';
+		pins(2).pointB = [0,0]';
+		% Left-top
+		pins(3).linkA = 2;
+		pins(3).linkB = 4;
+		pins(3).pointA = [4,0]';
+		pins(3).pointB = [0,0]';
+		% Right-top
+		pins(4).linkA = 3;
+		pins(4).linkB = 4;
+		pins(4).pointA = [5,0]'; % pin location on link3 is randomized
+		pins(4).pointB = [4,0]';
+		
+		% List of tracer particles for display
+		particles(1).link = 4; % which link?
+		particles(1).point = [0.5,0.1]'; % tracer particle point in local coords
+		particles(2).link = 4;
+		particles(2).point = [2.5,-0.1]';
 	case 2
-		% Double-rocker
+		% Double-rocker % s = 1, l = 4, p = 4, q = 3
+		% Bottom link
+		links(1).angle = 0; % rotation from the positive x-axis
+		links(1).pos = [-1 0]'; % position of the center of rotation
+		links(1).verts = [ % display vertices
+			 0.0  3.0  3.0  0.0
+			-0.1 -0.1  0.1  0.1
+			];
+		% Left link
+		links(2).angle = acos(1/4);
+		links(2).pos = [-1 0]';
+		links(2).verts = [
+			 0.0  4.0  4.0  0.0
+			-0.1 -0.1  0.1  0.1
+			];
+		% Right link
+		links(3).angle = pi/2;
+		links(3).pos = [1 0]';
+		links(3).verts = [
+			 0.0  4.0  4.0  0.0
+			-0.1 -0.1  0.1  0.1
+			];
+		% Top link
+		links(4).angle = 0;
+		links(4).pos = [-1 1]';
+		links(4).verts = [
+			 0.0  1.0  1.0  0.0
+			-0.1 -0.1  0.1  0.1
+			];
+		
+		% Which link is grounded?
+		grounded = 1;
+		% Which link is the driver?
+		% Note: the driver must be attached (with a pin) to the ground.
+		driver = 2;
+		
+		% Bottom-left
+		pins(1).linkA = 1;
+		pins(1).linkB = 2;
+		pins(1).pointA = [0,0]';
+		pins(1).pointB = [0,0]';
+		% Bottom-right
+		pins(2).linkA = 1;
+		pins(2).linkB = 3;
+		pins(2).pointA = [3,0]';
+		pins(2).pointB = [0,0]';
+		% Left-top
+		pins(3).linkA = 2;
+		pins(3).linkB = 4;
+		pins(3).pointA = [4,0]';
+		pins(3).pointB = [0,0]';
+		% Right-top
+		pins(4).linkA = 3;
+		pins(4).linkB = 4;
+		pins(4).pointA = [4,0]'; % pin location on link3 is randomized
+		pins(4).pointB = [1,0]';
+		
+		% List of tracer particles for display
+		particles(1).link = 4; % which link?
+		particles(1).point = [0,0]'; % tracer particle point in local coords
+		particles(2).link = 4;
+		particles(2).point = [1,0]';
 	case 3
-		% Hoekens
+		% Hoekens/Chebyshev
+        % Double-rocker % s = 1, l = 2, p = 2.5, q = 5
+		% Bottom link
+		links(1).angle = 0; % rotation from the positive x-axis
+		links(1).pos = [-1 0]'; % position of the center of rotation
+		links(1).verts = [ % display vertices
+			 0.0  2.0  2.0  0.0
+			-0.1 -0.1  0.1  0.1
+			];
+		% Left link
+		links(2).angle = 0;
+		links(2).pos = [-1 0]';
+		links(2).verts = [
+			 0.0  1.0  1.0  0.0
+			-0.1 -0.1  0.1  0.1
+			];
+		% Right link
+		links(3).angle = pi/2;
+		links(3).pos = [1 0]';
+		links(3).verts = [
+			 0.0  2.5  2.5  0.0
+			-0.1 -0.1  0.1  0.1
+			];
+		% Top link
+		links(4).angle = 0;
+		links(4).pos = [-1 1]';
+		links(4).verts = [
+			 0.0  5.0  5.0  0.0
+			-0.1 -0.1  0.1  0.1
+			];
+		
+		% Which link is grounded?
+		grounded = 1;
+		% Which link is the driver?
+		% Note: the driver must be attached (with a pin) to the ground.
+		driver = 2;
+		
+		% Bottom-left
+		pins(1).linkA = 1;
+		pins(1).linkB = 2;
+		pins(1).pointA = [0,0]';
+		pins(1).pointB = [0,0]';
+		% Bottom-right
+		pins(2).linkA = 1;
+		pins(2).linkB = 3;
+		pins(2).pointA = [2,0]';
+		pins(2).pointB = [0,0]';
+		% Left-top
+		pins(3).linkA = 2;
+		pins(3).linkB = 4;
+		pins(3).pointA = [1,0]';
+		pins(3).pointB = [0,0]';
+		% Right-top
+		pins(4).linkA = 3;
+		pins(4).linkB = 4;
+		pins(4).pointA = [2.5,0]'; % pin location on link3 is randomized
+		pins(4).pointB = [2.5,0]';
+		
+		% List of tracer particles for display
+		particles(1).link = 4; % which link?
+		particles(1).point = [0,0]'; % tracer particle point in local coords
+		particles(2).link = 4;
+		particles(2).point = [5,0]';
 	case 4
 		% Peaucellier-Lipkin
+        % stationary link
+        % s = 1, 
+		links(1).angle = 0; % rotation from the positive x-axis
+		links(1).pos = [-1 0]'; % position of the center of rotation
+		links(1).verts = [ % display vertices
+			 0.0  1.0  1.0  0.0
+             0.0  0.0  0.0  0.0
+			];
+		% driver link
+		links(2).angle = 0;
+		links(2).pos = [0 0]';
+		links(2).verts = [
+			 0.0  1.0  1.0  0.0
+			-0.1 -0.1  0.1  0.1
+			];
+		% parallelogram link1
+		links(3).angle = pi/2;
+		links(3).pos = [1 0]';
+		links(3).verts = [
+			 0.0  2.0  2.0  0.0
+			-0.1 -0.1  0.1  0.1
+			];
+		% parallelogram link2
+		links(4).angle = -pi/5;
+		links(4).pos = [1 0]';
+		links(4).verts = [
+			 0.0  2.0  2.0  0.0
+			-0.1 -0.1  0.1  0.1
+			];
+        % parallelogram link3
+		links(5).angle = -pi/9;
+		links(5).pos = [2 sqrt(3)]';
+		links(5).verts = [
+			 0.0  2.0  2.0  0.0
+			-0.1 -0.1  0.1  0.1
+			];
+        % parallelogram link4
+		links(6).angle = pi/3;
+		links(6).pos = [2 -sqrt(3)]';
+		links(6).verts = [
+			 0.0  2.0  2.0  0.0
+			-0.1 -0.1  0.1  0.1
+			];
+        % long link 1
+		links(7).angle = pi/6;
+		links(7).pos = [-1 0]';
+		links(7).verts = [
+			 0.0  2*sqrt(3)  2*sqrt(3)  0.0
+			-0.1 -0.1  0.1  0.1
+			];
+        % long link 1
+		links(8).angle = -pi/6;
+		links(8).pos = [-1 0]';
+		links(8).verts = [
+			 0.0  2*sqrt(3)  2*sqrt(3)  0.0
+			-0.1 -0.1  0.1  0.1
+			];
+        grounded = 1;
+        driver = 2;
+        
+        pins(1).linkA = 1;
+        pins(1).linkB = 2;
+        pins(1).pointA = [1,0]';
+        pins(1).pointB = [0,0]';
+        pins(2).linkA = 2;
+        pins(2).linkB = 3;
+        pins(2).pointA = [1,0]';
+        pins(2).pointB = [0,0]';
+        pins(3).linkA = 2;
+        pins(3).linkB = 4;
+        pins(3).pointA = [1,0]';
+        pins(3).pointB = [0,0]';
+        pins(4).linkA = 3;
+        pins(4).linkB = 5;
+        pins(4).pointA = [2,0]';
+        pins(4).pointB = [0,0]';
+        pins(5).linkA = 4;
+        pins(5).linkB = 6;
+        pins(5).pointA = [2,0]';
+        pins(5).pointB = [0,0]';
+        pins(6).linkA = 5;
+        pins(6).linkB = 6;
+        pins(6).pointA = [2,0]';
+        pins(6).pointB = [2,0]';
+        pins(7).linkA = 1;
+        pins(7).linkB = 7;
+        pins(7).pointA = [0,0]';
+        pins(7).pointB = [0,0]';
+        pins(8).linkA = 1;
+        pins(8).linkB = 8;
+        pins(8).pointA = [0,0]';
+        pins(8).pointB = [0,0]';
+        pins(9).linkA = 5;
+        pins(9).linkB = 7;
+        pins(9).pointA = [0,0]';
+        pins(9).pointB = [2*sqrt(3),0]';
+        pins(10).linkA = 6;
+        pins(10).linkB = 8;
+        pins(10).pointA = [0,0]';
+        pins(10).pointB = [2*sqrt(3),0]';
+        
+        particles(1).link = 5;
+        particles(1).point = [2,0]';
+        
+        
 	case 5
 		% Klann
+        % stationary
+        links(1).angle = 0; % rotation from the positive x-axis
+        links(1).pos = [0 0]'; % position of the center of rotation
+        links(1).verts = [
+        -266.16  0.0  -266.16
+        61.45 0.0  -130
+        ];
+        
+        links(2).angle = 3*pi/2;
+        links(2).pos = [0 0]';
+        links(2).verts = [
+            0.0 110 110 0
+            -5  -5  5   5
+        ];
+    
+        links(3).angle = 0;
+        links(3).pos = [0 0]';
+        links(3).verts = [
+            0.0 130 130 0
+            -5  -5  5   5
+        ];
+    
+        links(4).angle = 0;
+        links(4).pos = [0 0]';
+        links(4).verts = [
+            0.0 182 182 0
+            -5  -5  5   5
+        ];
+    
+        links(5).angle = 0;
+        links(5).pos = [0 0]';
+        links(5).verts = [
+            0.0 288 288 0 -216.65 -216.65
+            -5  -5  5 5 43.20 33.20 
+        ];
+    
+        links(6).angle = 0;
+        links(6).pos = [0 0]';
+        links(6).verts = [
+            0.0 265 734.57 734.57 265 0
+            -5  -5 135 145 5   5
+        ];
+    
+    
+
+        pins(1).linkA = 1;
+        pins(1).linkB = 2;
+        pins(1).pointA = [0 0]';
+        pins(1).pointB = [0 0]';
+        
+        pins(2).linkA = 1;
+        pins(2).linkB = 3;
+        pins(2).pointA = [-266.16 -130]';
+        pins(2).pointB = [0 0]';
+        
+        pins(3).linkA = 1;
+        pins(3).linkB = 4;
+        pins(3).pointA = [-266.16 61.45]';
+        pins(3).pointB = [0 0]';
+        
+        pins(4).linkA = 2;
+        pins(4).linkB = 5;
+        pins(4).pointA = [110 0]';
+        pins(4).pointB = [288 0]';
+        
+        pins(5).linkA = 4;
+        pins(5).linkB = 6;
+        pins(5).pointA = [182 0]';
+        pins(5).pointB = [0 0]';
+
+        pins(6).linkA = 3;
+        pins(6).linkB = 5;
+        pins(6).pointA = [130 0]';
+        pins(6).pointB = [0 0]';
+        
+        
+        pins(7).linkA = 6;
+        pins(7).linkB = 5;
+        pins(7).pointA = [265 0]';
+        pins(7).pointB = [-216.65 38.53]';
+        
+        
+        grounded = 1;
+        driver = 2;
+        
+        particles(1).link = 6;
+        particles(1).point = [734.57,140]';
+        
+        
 	case 6
 		% Another linkage
 	case 10
@@ -104,7 +482,7 @@ for i = 1 : length(particles)
 end
 
 % Debug: drawing here to debug scene setup
-%drawScene(0,links,pins,sliders,particles);
+drawScene(0,links,pins,sliders,particles);
 
 % lsqnonlin options
 if verLessThan('matlab','8.1')
@@ -121,14 +499,16 @@ end
 
 % Simulation loop
 t = 0; % current time
-T = 1; % final time
+T = 2; % final time
 dt = 0.01; % time step
-angVel = 2*pi; % driver angular velocity
-w = 10; % radius frequency of the oscillation
-min_angle = pi/3; % oscillation range
-max_angle = pi; % uscillation range
-original = links(driver).angleTarget; % original angle, used for oscillation
-oscillation = true
+angVel = -2*pi; % driver angular velocity
+w = 20; % radius frequency of the oscillation
+
+
+% (Peaucellier-Lipkin linkage)
+min_angle = -pi/3; % oscillation range 
+max_angle = pi/3; % uscillation range
+
 while t < T
 	% Procedurally set the driver angle.
 	% Right now, the target angle is being linearly increased, but you may
@@ -136,14 +516,10 @@ while t < T
     if ~oscillation
         links(driver).angleTarget = links(driver).angleTarget + dt*angVel;
     else
-        
-    %oscillatory motion code blcok
-  
-    links(driver).angleTarget = original + ...
-        (max_angle - min_angle) * sin(w*t) / 2 + (max_angle + min_angle) / 2;
-    links(driver).angleTarget
-    
-    
+        %oscillatory motion code blcok
+        links(driver).angleTarget = ...
+            (max_angle - min_angle) * sin(w*t) / 2 + (max_angle + min_angle) / 2;
+    end    
     
 	% Solve for linkage orientations and positions
 	[links,feasible] = solveLinkage(links,pins,sliders,opt);
@@ -198,7 +574,7 @@ ub =  inf(size(angPos0));
 [angPos,r2] = lsqnonlin(@(angPos)objFun(angPos,links,sliders,pins),angPos0,lb,ub,opt);
 % If the mechanism is feasible, then the residual should be zero
 feasible = true;
-if r2 > 1e-6
+if r2 > 1e-4
 	fprintf('Mechanism is over constrained!\n');
 	feasible = false;
 end

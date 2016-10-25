@@ -1,7 +1,10 @@
 issues: 
 1. have to install optimization toolbox. Otherwise there will be an issue with optimoptions function, which says that "optimoptions Invalid solver specified. Provide a solver name or handle".
-2. how to 
+2. c^2 = a^2 + b^2 - 2*a*b*cos(theta)
+3. Chebyshev https://en.wikipedia.org/wiki/Chebyshev%27s_Lambda_Mechanism
+4. double rocker top link tumbling
+4. klann's dimensions: http://robotronics09.blogspot.com/2011/01/klann-mechanism.html
 
 reference:
-drag link vs. crank rocker vs. double rocker
+1. drag link vs. crank rocker vs. double rocker
 http://robotics.mem.drexel.edu/mhsieh/Courses/E91_F07/notes/linkages2.pdf
