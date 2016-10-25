@@ -492,8 +492,8 @@ switch scene
         links(2).angle = 0;
         links(2).pos = [0 0]';
         links(2).verts = [
-            0 2 2 0
-            -0.1  -0.1  0.1   0.1
+            0 2 2 0 -1 -1 0 -1 -1 0
+            -0.1  -0.1  0.1   0.1 sqrt(3)+0.1 sqrt(3)-0.1 -0.1 -sqrt(3)-0.1 -sqrt(3)+0.1 0.1
         ];
     
         links(3).angle = 0;
@@ -509,38 +509,110 @@ switch scene
             0 8 8 0
             -0.1  -0.1  0.1   0.1
         ];
-
+    
+        links(5).angle = 0;
+        links(5).pos = [0 0]';
+        links(5).verts = [
+            0 8 8 0
+            -0.1  -0.1  0.1   0.1
+        ];
+    
+        links(6).angle = 0;
+        links(6).pos = [0 0]';
+        links(6).verts = [
+            0 8 8 0
+            -0.1  -0.1  0.1   0.1
+        ];
+    
+        links(7).angle = 0;
+        links(7).pos = [0 0]';
+        links(7).verts = [
+            0 8 8 0
+            -0.1  -0.1  0.1   0.1
+        ];
+    
+        links(8).angle = 0;
+        links(8).pos = [0 0]';
+        links(8).verts = [
+            0 8 8 0
+            -0.1  -0.1  0.1   0.1
+        ];
+        
         pins(1).linkA = 2;
-        pins(1).linkB = 3;
-        pins(1).pointA = [2 0]';
+        pins(1).linkB = 1;
+        pins(1).pointA = [0 0]';
         pins(1).pointB = [0 0]';
         
         pins(2).linkA = 2;
-        pins(2).linkB = 1;
-        pins(2).pointA = [0 0]';
+        pins(2).linkB = 3;
+        pins(2).pointA = [2 0]';
         pins(2).pointB = [0 0]';
         
         pins(3).linkA = 2;
         pins(3).linkB = 4;
         pins(3).pointA = [2 0]';
         pins(3).pointB = [0 0]';
+        
+        pins(4).linkA = 2;
+        pins(4).linkB = 5;
+        pins(4).pointA = [-1 sqrt(3)]';
+        pins(4).pointB = [0 0]';
+        
+        pins(5).linkA = 2;
+        pins(5).linkB = 6;
+        pins(5).pointA = [-1 sqrt(3)]';
+        pins(5).pointB = [0 0]';
+        
+        pins(6).linkA = 2;
+        pins(6).linkB = 7;
+        pins(6).pointA = [-1 -sqrt(3)]';
+        pins(6).pointB = [0 0]';
+        
+        pins(7).linkA = 2;
+        pins(7).linkB = 8;
+        pins(7).pointA = [-1 -sqrt(3)]';
+        pins(7).pointB = [0 0]';
 
         sliders(1).linkA = 3;
         sliders(1).linkB = 1;
         sliders(1).pointA = [8 0]';
-        sliders(1).rangeB = [[0 0]' [10 10]'];
+        sliders(1).rangeB = [[0 0]' [7.7 7.7]'];
         
         sliders(2).linkA = 4;
         sliders(2).linkB = 1;
         sliders(2).pointA = [8 0]';
-        sliders(2).rangeB = [[0 0]' [-10 10]'];
+        sliders(2).rangeB = [[0 0]' [-7.7 7.7]'];
+        
+        sliders(3).linkA = 5;
+        sliders(3).linkB = 1;
+        sliders(3).pointA = [8 0]';
+        sliders(3).rangeB = [[0 0]' [7.7 7.7]'];
+        
+        sliders(4).linkA = 6;
+        sliders(4).linkB = 1;
+        sliders(4).pointA = [8 0]';
+        sliders(4).rangeB = [[0 0]' [-7.7 7.7]'];
     
+        sliders(5).linkA = 7;
+        sliders(5).linkB = 1;
+        sliders(5).pointA = [8 0]';
+        sliders(5).rangeB = [[0 0]' [7.7 7.7]'];
+        
+        sliders(6).linkA = 8;
+        sliders(6).linkB = 1;
+        sliders(6).pointA = [8 0]';
+        sliders(6).rangeB = [[0 0]' [-7.7 7.7]'];    
+        
         grounded = 1;
         driver = 2;
         
         
         particles(1).link = 2;
         particles(1).point = [2 0]';
+        particles(2).link = 2;
+        particles(2).point = [-1 sqrt(3)]';
+        particles(3).link = 2;
+        particles(3).point = [-1 -sqrt(3)]';
         
 	case 10
         jacobian = false;
@@ -650,7 +722,6 @@ while t < T
 	[links,feasible] = solveLinkage(links,pins,sliders,opt);
 	% Update particle positions
 	particles = updateParticles(links,particles);
-%     links(3).pos
 	% Draw scene
 	drawScene(t,links,pins,sliders,particles);
 	% Quit if over-constrained
